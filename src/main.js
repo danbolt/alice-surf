@@ -46,6 +46,7 @@ Preload.prototype.preload = function() {
   this.game.load.bitmapFont('font', 'asset/font/font.png', 'asset/font/font.json');
 
   this.game.load.spritesheet('test16x16', 'asset/img/16x16SquareSheet.png', 16, 16);
+  this.game.load.spritesheet('test32x32', 'asset/img/16x16SquareSheet.png', 32, 32);
   this.game.load.image('test16x16_tile', 'asset/img/16x16SquareSheet.png');
 
   this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);
@@ -91,11 +92,20 @@ Preload.prototype.create = function() {
   this.ui.addChild(catCounter);
 
   // create a player
-  this.player = this.game.add.sprite(48, 128, 'test16x16', 3);
+  this.player = this.game.add.sprite(48, 128, 'test32x32', 4);
   this.game.physics.arcade.enable(this.player, Phaser.Physics.ARCADE);
   this.player.body.setSize(8, 8);
-  this.player.body.offset.x = 4;
-  this.player.body.offset.y = 8;
+  this.player.body.offset.x = 16;
+  this.player.body.offset.y = 16;
+  this.player.update = function () {
+    if (this.body.velocity.y < 0) {
+      this.frame = 4;
+    } else if (this.body.velocity.y > 90) {
+      this.frame = 6;
+    } else {
+      this.frame = 5;
+    }
+  };
 
   this.game.camera.follow(this.player);
 };
@@ -111,8 +121,24 @@ Preload.prototype.update = function() {
 
   this.player.body.velocity.x = 100;
 
-  if (this.player.body.onWall() || this.player.body.touching.up) {
+  // if we bump the ceiling or a wall, the player loses!
+  if (this.player.alive && (this.player.body.onWall() || this.player.body.touching.up)) {
     this.player.kill();
+
+    var playerParticle = this.game.add.sprite(this.player.x, this.player.y, 'test32x32', 7);
+    this.game.physics.enable(playerParticle, Phaser.Physics.ARCADE);
+    playerParticle.body.velocity.set(-200);
+    playerParticle.anchor.set(0.5);
+
+    var boardParticle = this.game.add.sprite(this.player.x, this.player.y, 'test32x32', 8);
+    this.game.physics.enable(boardParticle, Phaser.Physics.ARCADE);
+    boardParticle.body.velocity.set(100, -400);
+    boardParticle.anchor.set(0.5);
+
+    this.game.time.events.loop(200, function () {
+      playerParticle.rotation += 90;
+      boardParticle.rotation += -90;
+    }, this);
   }
 };
 
