@@ -2,6 +2,10 @@ var Constants = {
   Gravity : 500,
 };
 
+var GameState = {
+  Score: 0
+};
+
 var Cat = function (game, x, y) {
   var offset = ~~(Math.random() * 3);
 
@@ -25,8 +29,6 @@ Gameplay.prototype.init = function(levelNumber) {
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
-
-  this.game.input.gamepad.start();
 
   this.level = levelNumber;
 };
@@ -101,6 +103,8 @@ Gameplay.prototype.update = function() {
     this.catCounter.text = 'cats:  ' + (this.catCount < 10 ? ('0' + (this.catCount)) : (this.catCount));
     cat.kill();
 
+    GameState.Score += 3;
+
     return false;
   }, this);
 
@@ -139,7 +143,7 @@ Gameplay.prototype.update = function() {
     youWonText.anchor.set(0.5, 0.5);
 
     this.game.time.events.add(2000, function () {
-      this.nextLevelEvent = this.game.state.start('PostWave', true, false, this.level);
+      this.nextLevelEvent = this.game.state.start('PostWave', true, false, this.level, this.catCount);
     }, this);
   }
 };
