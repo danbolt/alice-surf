@@ -184,6 +184,7 @@ Gameplay.prototype.update = function() {
 
 var main = function () {
 	var game = new Phaser.Game(320, 240);
+  game.state.add('Preload', Preload, false);
   game.state.add('Load', Load, false);
   game.state.add('Cutscene', Cutscene, false);
   game.state.add('GameOver', GameOver, false);
@@ -192,5 +193,5 @@ var main = function () {
   game.state.add('TitleScreen', TitleScreen, false);
 	game.state.add('Gameplay', Gameplay, false);
 
-	game.state.start('Load');
+	game.state.start('Preload');
 };

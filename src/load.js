@@ -11,10 +11,10 @@ var soundEffectsToLoad = [
 
 SoundBank = [];
 
-var Load = function () {
-	//
+var Preload = function () {
+  //
 };
-Load.prototype.init = function () {
+Preload.prototype.init = function () {
   this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
   this.game.scale.refresh();
 
@@ -26,12 +26,27 @@ Load.prototype.init = function () {
   this.game.renderer.renderSession.roundPixels = true;  
   Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
   PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST; //for WebGL
-}
-Load.prototype.preload = function() {
+};
+Preload.prototype.preload = function () {
   // Font is Gamegirl Classic by freakyfonts
   // License is for noncommercial use
   // http://www.fontspace.com/freaky-fonts/gamegirl-classic
   this.game.load.bitmapFont('font', 'asset/font/font.png', 'asset/font/font.json');
+};
+Preload.prototype.create = function () {
+  var loadingText = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', 'loading!\n\nplease wait!', 8);
+  loadingText.align = 'center';
+  loadingText.anchor.set(0.5);
+
+  this.game.state.start('Load', false);
+};
+
+var Load = function () {
+	//
+};
+Load.prototype.init = function () {
+}
+Load.prototype.preload = function() {
 
   this.game.load.spritesheet('test16x16', 'asset/img/16x16SquareSheet.png', 16, 16);
   this.game.load.spritesheet('test32x32', 'asset/img/16x16SquareSheet.png', 32, 32);
@@ -42,6 +57,10 @@ Load.prototype.preload = function() {
   this.game.load.spritesheet('cutscene', 'asset/img/cutscene.png', 320, 128);
 
   this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('level2', 'asset/map/level2.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('level3', 'asset/map/level3.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('level4', 'asset/map/level4.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('level5', 'asset/map/level5.json', undefined, Phaser.Tilemap.TILED_JSON);
 
   this.game.load.audio('background_melody', 'asset/bgm/bgm.mp3');
 
