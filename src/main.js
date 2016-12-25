@@ -3,12 +3,14 @@ var Constants = {
 };
 
 var Cat = function (game, x, y) {
-  Phaser.Sprite.call(this, game, x, y, 'test16x16', 6);
+  var offset = ~~(Math.random() * 3);
+
+  Phaser.Sprite.call(this, game, x, y, 'test16x16', 6 + 2 * offset);
 
   this.game.physics.arcade.enable(this, Phaser.Physics.ARCADE);
   this.body.allowGravity = false;
 
-  this.animations.add('cat_dance', [6, 7], 3, true);
+  this.animations.add('cat_dance', [6 + (2 * offset), 7 + (2 * offset)], 3, true);
   this.animations.play('cat_dance');
 
   this.game.add.existing(this);
@@ -16,50 +18,34 @@ var Cat = function (game, x, y) {
 Cat.prototype = Object.create(Phaser.Sprite.prototype);
 Cat.prototype.constructor = Cat;
 
-
-var Preload = function () {
+var Gameplay = function () {
 	//
 };
-Preload.prototype.init = function() {
-  this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-  this.game.scale.refresh();
-
-  this.game.scale.pageAlignHorizontally = true;
-  this.game.scale.pageAlignVertically = true;
-
-  // enable crisp rendering
-  this.game.stage.smoothed = false;
-  this.game.renderer.renderSession.roundPixels = true;  
-  Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
-  PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST; //for WebGL
-
+Gameplay.prototype.init = function() {
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
   this.game.input.gamepad.start();
 };
-Preload.prototype.preload = function() {
-  // Font is Gamegirl Classic by freakyfonts
-  // License is for noncommercial use
-  // http://www.fontspace.com/freaky-fonts/gamegirl-classic
-  this.game.load.bitmapFont('font', 'asset/font/font.png', 'asset/font/font.json');
-
-  this.game.load.spritesheet('test16x16', 'asset/img/16x16SquareSheet.png', 16, 16);
-  this.game.load.spritesheet('test32x32', 'asset/img/16x16SquareSheet.png', 32, 32);
-  this.game.load.image('test16x16_tile', 'asset/img/16x16SquareSheet.png');
-
-  this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);
+Gameplay.prototype.Gameplay = function() {
+  //
 };
-Preload.prototype.create = function() {
+Gameplay.prototype.create = function() {
 
   // game logic config
   this.level = 0; // starts at 0 for 'array indexing'
   this.catCount = 0;
-  this.game.stage.backgroundColor = '#333333';
+  this.game.stage.backgroundColor = '#3b8fb5';
 
   // physics config
   this.game.physics.arcade.gravity.y = Constants.Gravity;
+
+  // create background
+  var background = this.game.add.sprite(0, 120, 'test16x16', 5);
+  background.fixedToCamera = true;
+  background.width = this.game.width;
+  background.height = this.game.height - 120;
 
   // create map
   this.map = this.game.add.tilemap('level1');
@@ -109,7 +95,7 @@ Preload.prototype.create = function() {
 
   this.game.camera.follow(this.player);
 };
-Preload.prototype.update = function() {
+Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground, null, null, this);
   this.game.physics.arcade.overlap(this.player, this.cats, undefined, function (player, cat) {
     this.catCount++;
@@ -135,16 +121,25 @@ Preload.prototype.update = function() {
     boardParticle.body.velocity.set(100, -400);
     boardParticle.anchor.set(0.5);
 
-    this.game.time.events.loop(200, function () {
+    var animateLoop = this.game.time.events.loop(200, function () {
       playerParticle.rotation += 90;
       boardParticle.rotation += -90;
+    }, this);
+
+    this.game.time.events.add(2000, function () {
+      this.game.time.events.remove(animateLoop);
+
+      this.game.state.start('GameOver');
     }, this);
   }
 };
 
 var main = function () {
 	var game = new Phaser.Game(320, 240);
-	game.state.add('Preload', Preload, false);
+  game.state.add('Load', Load, false);
+  game.state.add('GameOver', GameOver, false);
+  game.state.add('TitleScreen', TitleScreen, false);
+	game.state.add('Gameplay', Gameplay, false);
 
-	game.state.start('Preload');
+	game.state.start('Load');
 };
