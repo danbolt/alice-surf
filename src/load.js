@@ -37,6 +37,8 @@ Load.prototype.preload = function() {
   this.game.load.spritesheet('test32x32', 'asset/img/16x16SquareSheet.png', 32, 32);
   this.game.load.image('test16x16_tile', 'asset/img/16x16SquareSheet.png');
 
+  this.game.load.image('logo', 'asset/img/logo.png');
+
   this.game.load.spritesheet('cutscene', 'asset/img/cutscene.png', 320, 128);
 
   this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);

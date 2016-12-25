@@ -6,7 +6,7 @@ GameOver.prototype.create = function () {
 
   this.game.camera.reset();
 
-  var text = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', 'game over!\n\nyour score was ' + GameState.Score + '\n\npress space to go back to title', 8);
+  var text = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', 'crash! game over!\n\n\n\nyour score was ' + GameState.Score + '\n\n\n\npress space to return\n\nto the title screen', 8);
   text.anchor.set(0.5);
   text.align = 'center';
 

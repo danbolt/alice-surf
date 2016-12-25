@@ -6,7 +6,12 @@ TitleScreen.prototype.create = function () {
 
   this.game.camera.reset();
 
-  var text = this.game.add.bitmapText(0, 0, 'font', 'title screen\npress space bro', 8);
+  var logo = this.game.add.sprite(this.game.width / 2, this.game.height / 4 + 16, 'logo');
+  logo.anchor.set(0.5, 0.5);
+
+  var text = this.game.add.bitmapText(this.game.width / 2, this.game.height / 3 * 2, 'font', 'merry christmas alice!\nlove daniel\n\n\npress space to play', 8);
+  text.align = 'center';
+  text.anchor.set(0.5);
 
   var downKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).onUp.add(function () {
     GameState.Score = 0;
