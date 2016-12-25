@@ -2,8 +2,7 @@ var Cutscene = function () {
   this.dialogue = [
     'Alice! We need your help!',
     'Surfs up and the cats are in\ndanger!',
-    'You need to save them! That\'s\ntotally my last executive\norder as prez.',
-    'I\'m on it!'
+    'You need to save them! That\'s\ntotally my last executive\norder as prez. Good luck!',
   ];
 };
 Cutscene.prototype.create = function () {
@@ -47,6 +46,9 @@ Cutscene.prototype.playText = function () {
     }
 
     //bip
+    if (this.dialogue[this.index] !== ' ') {
+      SoundBank['bip'].play(undefined, undefined, 0.6);
+    }
 
     this.logoText.text = this.dialogue[this.index].substring(0, bipCounter);
 

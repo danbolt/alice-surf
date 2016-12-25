@@ -1,3 +1,16 @@
+var soundEffectsToLoad = [
+  'surf0',
+  'surf1',
+  'surf2',
+  'cat1',
+  'cat2',
+  'bip',
+  'hurt',
+  'select'
+];
+
+SoundBank = [];
+
 var Load = function () {
 	//
 };
@@ -28,22 +41,19 @@ Load.prototype.preload = function() {
 
   this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);
 
-  //this.game.load.audio('background_melody', 'asset/bgm/jealous-villages.mp3');
+  this.game.load.audio('background_melody', 'asset/bgm/bgm.mp3');
 
-  /*
   soundEffectsToLoad.forEach(function (sname) {
     this.game.load.audio(sname, 'asset/sfx/' + sname + '.wav');
   }, this);
-  */
 };
 Load.prototype.create = function() {
-  /*
   this.game.bgmMelody = this.game.add.audio('background_melody', 0.8, true);
   this.game.bgmMelody.play();
 
 	soundEffectsToLoad.forEach(function (sname) {
     SoundBank[sname] = this.game.add.audio(sname, 0.8, false);
-  }, this);*/
+  }, this);
 
  	this.game.state.start('Cutscene');
 };

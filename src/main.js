@@ -67,16 +67,30 @@ Gameplay.prototype.create = function() {
   // input logic
   this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).onDown.add(function () {
     this.player.body.velocity.y = -100;
+
+    SoundBank['surf' + ~~(Math.random() * 3)].play();
   }, this);
+
+  // <-- particle effects
 
   // ui
   this.ui = this.game.add.group();
   this.ui.fixedToCamera = true;
   var levelCounter = this.game.add.bitmapText(8, 8, 'font', 'level: ' + (this.level < 9 ? '0' + (this.level + 1) : (this.level + 1)), 8);
   this.ui.addChild(levelCounter);
-  var catCounter = this.game.add.bitmapText(8, 16, 'font', 'cats:  ' + (this.catCount < 10 ? ('0' + (this.catCount)) : (this.catCount)), 8);
+  var catCounter = this.game.add.bitmapText(8, 16, 'font', ' cats: ' + (this.catCount < 10 ? ('0' + (this.catCount)) : (this.catCount)), 8);
   this.catCounter = catCounter;
   this.ui.addChild(catCounter);
+
+  // text effects
+  this.textEffects = this.game.add.group();
+  for (var i = 0; i < 5; i++) {
+    var newText = this.game.add.bitmapText(0, 0, 'font', 'meow', 8);
+    newText.anchor.set(0.5, 0);
+    newText.align = 'center';
+    newText.kill();
+    this.textEffects.addChild(newText);
+  }
 
   // create a player
   this.player = this.game.add.sprite(48, 128, 'test32x32', 4);
@@ -100,10 +114,26 @@ Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground, null, null, this);
   this.game.physics.arcade.overlap(this.player, this.cats, undefined, function (player, cat) {
     this.catCount++;
-    this.catCounter.text = 'cats:  ' + (this.catCount < 10 ? ('0' + (this.catCount)) : (this.catCount));
+    this.catCounter.text = ' cats: ' + (this.catCount < 10 ? ('0' + (this.catCount)) : (this.catCount));
     cat.kill();
 
     GameState.Score += 3;
+
+    SoundBank['cat' + (~~(Math.random() * 2) + 1)].play();
+
+    var tFX = this.textEffects.getFirstDead();
+    if (tFX !== null) {
+      tFX.revive();
+      tFX.x = cat.x;
+      tFX.y = cat.y;
+
+      var meowTween = this.game.add.tween(tFX);
+      meowTween.to({ y: tFX.y - 32 }, 500, Phaser.Easing.Cubic.Out);
+      meowTween.onComplete.add(function () {
+        tFX.kill();
+      }, this);
+      meowTween.start();
+    }
 
     return false;
   }, this);
@@ -113,6 +143,8 @@ Gameplay.prototype.update = function() {
   // if we bump the ceiling or a wall, the player loses!
   if (this.player.alive && (this.player.body.onWall() || this.player.body.touching.up)) {
     this.player.kill();
+
+    SoundBank['hurt'].play();
 
     var playerParticle = this.game.add.sprite(this.player.x, this.player.y, 'test32x32', 7);
     this.game.physics.enable(playerParticle, Phaser.Physics.ARCADE);
@@ -142,7 +174,9 @@ Gameplay.prototype.update = function() {
     youWonText.align = 'center';
     youWonText.anchor.set(0.5, 0.5);
 
-    this.game.time.events.add(2000, function () {
+    SoundBank['select'].play();
+
+    this.nextLevelEvent = this.game.time.events.add(2000, function () {
       this.nextLevelEvent = this.game.state.start('PostWave', true, false, this.level, this.catCount);
     }, this);
   }

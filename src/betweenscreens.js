@@ -69,15 +69,21 @@ PostWave.prototype.create = function () {
     catCountLabel.text +=  'cats: \n\n';
     scoreValuesLabel.text += this.catCount + '\n\n';
 
+    SoundBank['select'].play();
+
     this.game.time.events.add(500, function () {
       catCountLabel.text += 'score: ';
       scoreValuesLabel.text += GameState.Score;
+
+    SoundBank['select'].play();
 
       this.game.time.events.add(650, function () {
         encouragementText.visible = true;
         var surfTween = this.game.add.tween(encouragementAnimation);
         surfTween.to({x: this.game.width + 32}, 2200);
         surfTween.start();
+
+        SoundBank['select'].play();
 
         this.game.time.events.add(3000, function () {
           this.game.state.start('PreWave', true, false, this.level + 1);

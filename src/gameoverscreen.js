@@ -11,6 +11,8 @@ GameOver.prototype.create = function () {
   text.align = 'center';
 
   var downKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).onUp.add(function () {
+    SoundBank['select'].play();
+
     this.game.state.start('TitleScreen');
   }, this);
 };

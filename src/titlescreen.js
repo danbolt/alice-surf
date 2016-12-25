@@ -11,6 +11,8 @@ TitleScreen.prototype.create = function () {
   var downKey = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).onUp.add(function () {
     GameState.Score = 0;
 
+    SoundBank['select'].play();
+
     this.game.state.start('PreWave', true, false, 0);
   }, this);
 };
