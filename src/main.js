@@ -49,7 +49,7 @@ Gameplay.prototype.create = function() {
   background.height = this.game.height - 120;
 
   // create map
-  this.map = this.game.add.tilemap('level' + ((this.level % 5) + 1));
+  this.map = this.game.add.tilemap('level' + ((this.level % 3) + 1));
   this.map.addTilesetImage('sheet', 'test16x16_tile');
   this.foreground = this.map.createLayer('Foreground');
   this.foreground.resizeWorld();
@@ -93,7 +93,7 @@ Gameplay.prototype.create = function() {
   }
 
   // create a player
-  this.player = this.game.add.sprite(48, 128, 'test32x32', 4);
+  this.player = this.game.add.sprite(24, 128, 'test32x32', 4);
   this.game.physics.arcade.enable(this.player, Phaser.Physics.ARCADE);
   this.player.body.setSize(8, 8);
   this.player.body.offset.x = 16;

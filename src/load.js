@@ -59,8 +59,6 @@ Load.prototype.preload = function() {
   this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);
   this.game.load.tilemap('level2', 'asset/map/level2.json', undefined, Phaser.Tilemap.TILED_JSON);
   this.game.load.tilemap('level3', 'asset/map/level3.json', undefined, Phaser.Tilemap.TILED_JSON);
-  this.game.load.tilemap('level4', 'asset/map/level4.json', undefined, Phaser.Tilemap.TILED_JSON);
-  this.game.load.tilemap('level5', 'asset/map/level5.json', undefined, Phaser.Tilemap.TILED_JSON);
 
   this.game.load.audio('background_melody', 'asset/bgm/bgm.mp3');
 
