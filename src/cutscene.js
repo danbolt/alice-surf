@@ -6,6 +6,10 @@ var Cutscene = function () {
   ];
 };
 Cutscene.prototype.create = function () {
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+  
   this.cutsceneImage = this.game.add.sprite(0, 24, 'cutscene', 0);
 
   this.index = 0;

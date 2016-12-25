@@ -2,6 +2,10 @@ var GameOver = function () {
   //
 };
 GameOver.prototype.create = function () {
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+  
   this.game.stage.backgroundColor = '#000000';
 
   this.game.camera.reset();

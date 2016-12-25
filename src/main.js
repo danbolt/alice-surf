@@ -26,13 +26,13 @@ var Gameplay = function () {
 	//
 };
 Gameplay.prototype.init = function(levelNumber) {
-  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
-  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
-  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
   this.level = levelNumber;
 };
 Gameplay.prototype.create = function() {
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
+  this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
   // game logic config
   this.catCount = 0;
@@ -49,7 +49,7 @@ Gameplay.prototype.create = function() {
   background.height = this.game.height - 120;
 
   // create map
-  this.map = this.game.add.tilemap('level1');
+  this.map = this.game.add.tilemap('level' + ((this.level % 5) + 1));
   this.map.addTilesetImage('sheet', 'test16x16_tile');
   this.foreground = this.map.createLayer('Foreground');
   this.foreground.resizeWorld();
