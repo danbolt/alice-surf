@@ -24,6 +24,8 @@ Load.prototype.preload = function() {
   this.game.load.spritesheet('test32x32', 'asset/img/16x16SquareSheet.png', 32, 32);
   this.game.load.image('test16x16_tile', 'asset/img/16x16SquareSheet.png');
 
+  this.game.load.spritesheet('cutscene', 'asset/img/cutscene.png', 320, 128);
+
   this.game.load.tilemap('level1', 'asset/map/level1.json', undefined, Phaser.Tilemap.TILED_JSON);
 
   //this.game.load.audio('background_melody', 'asset/bgm/jealous-villages.mp3');
@@ -43,5 +45,5 @@ Load.prototype.create = function() {
     SoundBank[sname] = this.game.add.audio(sname, 0.8, false);
   }, this);*/
 
- 	this.game.state.start('TitleScreen');
+ 	this.game.state.start('Cutscene');
 };

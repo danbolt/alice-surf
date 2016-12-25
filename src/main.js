@@ -147,6 +147,7 @@ Gameplay.prototype.update = function() {
 var main = function () {
 	var game = new Phaser.Game(320, 240);
   game.state.add('Load', Load, false);
+  game.state.add('Cutscene', Cutscene, false);
   game.state.add('GameOver', GameOver, false);
   game.state.add('PreWave', PreWave, false);
   game.state.add('PostWave', PostWave, false);
