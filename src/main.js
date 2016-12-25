@@ -21,22 +21,21 @@ Cat.prototype.constructor = Cat;
 var Gameplay = function () {
 	//
 };
-Gameplay.prototype.init = function() {
+Gameplay.prototype.init = function(levelNumber) {
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.DOWN);
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.UP);
   this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
   this.game.input.gamepad.start();
-};
-Gameplay.prototype.Gameplay = function() {
-  //
+
+  this.level = levelNumber;
 };
 Gameplay.prototype.create = function() {
 
   // game logic config
-  this.level = 0; // starts at 0 for 'array indexing'
   this.catCount = 0;
   this.game.stage.backgroundColor = '#3b8fb5';
+  this.nextLevelEvent = null;
 
   // physics config
   this.game.physics.arcade.gravity.y = Constants.Gravity;
@@ -132,12 +131,25 @@ Gameplay.prototype.update = function() {
       this.game.state.start('GameOver');
     }, this);
   }
+
+  if (this.player.x > this.game.world.width - 64 && this.nextLevelEvent === null) {
+    var youWonText = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', 'wave complete!', 8);
+    youWonText.fixedToCamera = true;
+    youWonText.align = 'center';
+    youWonText.anchor.set(0.5, 0.5);
+
+    this.game.time.events.add(2000, function () {
+      this.nextLevelEvent = this.game.state.start('PostWave', true, false, this.level);
+    }, this);
+  }
 };
 
 var main = function () {
 	var game = new Phaser.Game(320, 240);
   game.state.add('Load', Load, false);
   game.state.add('GameOver', GameOver, false);
+  game.state.add('PreWave', PreWave, false);
+  game.state.add('PostWave', PostWave, false);
   game.state.add('TitleScreen', TitleScreen, false);
 	game.state.add('Gameplay', Gameplay, false);
 
